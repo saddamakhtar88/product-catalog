@@ -4,6 +4,11 @@ import {StyleSheet, View, TextInput} from 'react-native';
 export class InfoScreen extends Component {
   constructor(props) {
     super();
+
+    this.state = {
+      title: props.route.params.title,
+      description: props.route.params.description,
+    };
   }
 
   render() {
@@ -22,15 +27,21 @@ export class InfoScreen extends Component {
             padding: 4,
             borderRadius: 4,
           }}
+          editable={this.props.route.params.isEditable}
           placeholder="Title"
+          autoCorrect={false}
+          maxLength={16}
           onChangeText={text => {
             this.props.route.params.title = text;
+            this.setState(_ => ({
+              title: text,
+            }));
           }}
-          value={this.props.route.params.title}></TextInput>
+          value={this.state.title}></TextInput>
         <TextInput
           style={{
             backgroundColor: 'white',
-            height: 80,
+            minHeight: 100,
             borderColor: 'grey',
             borderWidth: 1,
             marginTop: 8,
@@ -39,13 +50,18 @@ export class InfoScreen extends Component {
             padding: 4,
             borderRadius: 4,
           }}
+          editable={this.props.route.params.isEditable}
           placeholder="Description"
+          autoCorrect={false}
           multiline
           numberOfLines={8}
           onChangeText={text => {
             this.props.route.params.description = text;
+            this.setState(_ => ({
+              description: text,
+            }));
           }}
-          value={this.props.route.params.description}></TextInput>
+          value={this.state.description}></TextInput>
       </View>
     );
   }

@@ -64,7 +64,7 @@ export class HomeScreen extends Component {
                 navigation?.navigate('AddOrEdit', item);
               }}
               onInfoPress={() => {
-                navigation?.navigate('Info', item);
+                navigation?.navigate('Info', {...item, isEditable: false});
               }}></Thumbnail>
           )}></FlatList>
         {this.state.isEditModeEnabled ? (
