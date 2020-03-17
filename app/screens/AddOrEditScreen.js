@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
-import {CatalogList} from '../data-service/catalog-service';
+import {CatalogDataService} from '../data-service/catalog-service';
 
 export class AddOrEditScreen extends Component {
   constructor(props) {
@@ -17,7 +17,6 @@ export class AddOrEditScreen extends Component {
     catalogItem = null;
     if (props.route.params == null) {
       catalogItem = {
-        id: null,
         title: null,
         description: null,
         thumbnailUrl: null,
@@ -35,10 +34,7 @@ export class AddOrEditScreen extends Component {
 
   addImageInTheList(image) {
     newImage = {
-      id: catalogItem.images.length,
-      imageUrl: image.path,
-      description: null,
-      onDeviceImageInfo: image,
+      path: image.path,
     };
     catalogItem.images[catalogItem.images.length - 1] = newImage;
     this.insertAddImageCellItem();
@@ -59,6 +55,59 @@ export class AddOrEditScreen extends Component {
     catalogItem.images.push({id: NewItemCellId});
   }
 
+  onSavePress() {
+    if (catalogItem.images.length > 1) {
+      catalogItem.images.pop();
+      catalogItem.thumbnail = catalogItem.images[0].path;
+      console.log(catalogItem.images[0].path);
+      if (catalogItem.id == null) {
+        this.addCatalog(catalogItem);
+      } else {
+        this.updateCatalog(catalogItem);
+      }
+    }
+  }
+
+  onDeletePress() {
+    this.deleteCatalog(catalogItem.id);
+  }
+
+  addCatalog(catalog) {
+    dataService = new CatalogDataService();
+    dataService
+      .addCatalog(catalog)
+      .then(_ => {
+        navigation?.goBack();
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+  updateCatalog(catalog) {
+    dataService = new CatalogDataService();
+    dataService
+      .updateCatalog(catalog)
+      .then(_ => {
+        navigation?.goBack();
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+  deleteCatalog(catalogId) {
+    dataService = new CatalogDataService();
+    dataService
+      .deleteCatalog(catalogId)
+      .then(_ => {
+        navigation?.goBack();
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
   render() {
     return (
       <View style={styles.screenContainer}>
@@ -77,7 +126,7 @@ export class AddOrEditScreen extends Component {
                   <View style={styles.listItemOutline}>
                     <Image
                       style={styles.addedImage}
-                      source={{uri: item.imageUrl}}></Image>
+                      source={{uri: item.path}}></Image>
                     <TouchableOpacity
                       style={styles.deleteCta}
                       activeOpacity={0.2}
@@ -159,17 +208,7 @@ export class AddOrEditScreen extends Component {
           style={[styles.floatingButton, styles.saveButton]}
           activeOpacity={0.8}
           onPress={() => {
-            if (catalogItem.images.length > 1) {
-              catalogItem.images.pop();
-              if (catalogItem.id == null) {
-                catalogItem.id = CatalogList.length + 1;
-                catalogItem.title = 'new';
-                catalogItem.thumbnailUrl = catalogItem.images[0].imageUrl;
-                CatalogList.push(catalogItem);
-              } else {
-              }
-            }
-            navigation?.goBack();
+            this.onSavePress();
           }}>
           <Image
             style={[styles.floatingButtonImage]}
@@ -179,7 +218,9 @@ export class AddOrEditScreen extends Component {
           <TouchableOpacity
             style={[styles.floatingButton, styles.deleteButton]}
             activeOpacity={0.6}
-            onPress={() => {}}>
+            onPress={() => {
+              this.onDeletePress();
+            }}>
             <Image
               style={[styles.floatingButtonImage]}
               source={require('../images/delete_white.png')}></Image>

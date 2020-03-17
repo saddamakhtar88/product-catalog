@@ -8,25 +8,38 @@ import {
   View,
   ScrollView,
 } from 'react-native';
-import {useFocusEffect} from '@react-navigation/native';
 import {Thumbnail} from '../components/Thumbnail';
-import {CatalogList} from '../data-service/catalog-service';
+import {CatalogDataService} from '../data-service/catalog-service';
 
 export class HomeScreen extends Component {
   constructor() {
     super();
+
     this.state = {
       isEditModeEnabled: false,
-      catalogList: CatalogList,
+      catalogList: [],
     };
   }
 
+  loadData() {
+    dataService = new CatalogDataService();
+    dataService
+      .getCatalogs()
+      .then(catalogs => {
+        this.setState(previousState => ({
+          catalogList: catalogs,
+        }));
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
   componentDidMount() {
+    this.loadData();
     const unsubscribe = navigation?.addListener('focus', () => {
       {
-        this.setState(previousState => ({
-          catalogList: CatalogList,
-        }));
+        this.loadData();
       }
     });
   }
@@ -54,7 +67,7 @@ export class HomeScreen extends Component {
           renderItem={({item}) => (
             <Thumbnail
               style={styles.thumbnail}
-              imageUri={{uri: item.thumbnailUrl}}
+              imageUri={{uri: item.thumbnail}}
               label={item.title}
               showEditIcon={this.state.isEditModeEnabled}
               onPress={() => {

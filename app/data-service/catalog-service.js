@@ -1,44 +1,75 @@
-export const CatalogItem = {
-  id: '1',
-  title: 'label',
-  description: 'description',
-  thumbnailUrl: 'https://i.stack.imgur.com/EZvw8.jpg',
-  images: [
-    {
-      id: '1',
-      imageUrl: 'https://i.stack.imgur.com/EZvw8.jpg',
-      description: 'description text',
-    },
-    {
-      id: '2',
-      imageUrl: 'https://i.stack.imgur.com/EZvw8.jpg',
-      description: 'description text',
-    },
-  ],
-};
+import React from 'react';
+import {EnvironmentConfiguration} from '../EnvironmentConfiguration';
 
-export const CatalogList = [
-  {
-    id: '1',
-    title: 'label',
-    description: 'description',
-    thumbnailUrl: 'https://i.stack.imgur.com/EZvw8.jpg',
-    images: [
-      {
-        id: '1',
-        imageUrl: 'https://i.stack.imgur.com/EZvw8.jpg',
-        description: 'description text',
+export class CatalogDataService {
+  constructor() {
+    baseurl = new EnvironmentConfiguration().CatalogAPI_Base_URL;
+    catalogEndPoint = baseurl + 'Catalog';
+  }
+
+  getCatalogs() {
+    return fetch(catalogEndPoint).then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw 'Error in getCatalogs. Status: ' + response.status;
+      }
+    });
+  }
+
+  getCatalog(id) {
+    return fetch(`${catalogEndPoint}/${id}`).then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw 'Error in getCatalog. Status: ' + response.status;
+      }
+    });
+  }
+
+  addCatalog(catalog) {
+    return fetch(catalogEndPoint, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
-      {
-        id: '2',
-        imageUrl: 'https://i.stack.imgur.com/EZvw8.jpg',
-        description: 'description text',
+      body: JSON.stringify(catalog),
+    }).then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw 'Error in addCatalog. Status: ' + response.status;
+      }
+    });
+  }
+
+  updateCatalog(catalog) {
+    return fetch(catalogEndPoint, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
-      {
-        id: '3',
-        imageUrl: 'https://i.stack.imgur.com/EZvw8.jpg',
-        description: 'description text',
-      },
-    ],
-  },
-];
+      body: JSON.stringify(catalog),
+    }).then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw 'Error in updateCatalog. Status: ' + response.status;
+      }
+    });
+  }
+
+  deleteCatalog(id) {
+    return fetch(`${catalogEndPoint}/${id}`, {
+      method: 'DELETE',
+    }).then(response => {
+      if (response.ok) {
+        return response.body;
+      } else {
+        throw 'Error in deleteCatalog. Status: ' + response.status;
+      }
+    });
+  }
+}

@@ -19,8 +19,8 @@ export class ImageGalleryScreen extends Component {
     imageItems.forEach(function(item, index) {
       data.push({
         id: item.id,
-        image: {uri: item.imageUrl},
-        thumb: {uri: item.imageUrl},
+        image: {uri: item.path},
+        thumb: {uri: item.path},
       });
     });
   }
