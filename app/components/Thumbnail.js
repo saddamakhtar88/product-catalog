@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {GlobalStyles} from '../Styles';
 
 export function Thumbnail({
   style,
@@ -49,6 +50,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: 'grey',
     borderWidth: 0.5,
+    backgroundColor: GlobalStyles.Color.Secondary,
   },
   image: {
     width: '100%',

@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-evenly',
     margin: 4,
-    backgroundColor: 'slategray',
+    backgroundColor: GlobalStyles.Color.Secondary,
     borderWidth: 1.0,
     borderStyle: 'dashed',
     borderColor: 'white',
