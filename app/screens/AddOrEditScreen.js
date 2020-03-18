@@ -192,6 +192,7 @@ export class AddOrEditScreen extends Component {
                     }}>
                     Choose to Add
                   </Text>
+                  <View style={styles.divider}></View>
                 </View>
               </View>
             );
@@ -293,9 +294,9 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     alignSelf: 'center',
-    borderWidth: 1.0,
+    borderWidth: 2.0,
     borderColor: 'white',
-    borderRadius: 12,
+    borderRadius: 8,
   },
   divider: {
     height: 1,
@@ -329,8 +330,8 @@ const styles = StyleSheet.create({
     bottom: 50 + 34 + 18,
     right: 12,
     backgroundColor: 'white',
-    borderColor: 'grey',
-    borderWidth: 1,
+    borderColor: GlobalStyles.Color.Primary,
+    borderWidth: 2,
   },
   deleteButton: {
     bottom: 34,
