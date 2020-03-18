@@ -12,6 +12,7 @@ import {
 import {Thumbnail} from '../components/Thumbnail';
 import {CatalogDataService} from '../data-service/catalog-service';
 import {GlobalStyles} from '../Styles';
+import {EnvironmentConfiguration} from '../EnvironmentConfiguration';
 
 export class HomeScreen extends Component {
   constructor() {
@@ -72,7 +73,10 @@ export class HomeScreen extends Component {
           renderItem={({item}) => (
             <Thumbnail
               style={styles.thumbnail}
-              imageUri={{uri: item.thumbnail}}
+              imageUri={{
+                uri:
+                  EnvironmentConfiguration.Catalog_Image_Path + item.thumbnail,
+              }}
               label={item.title}
               showEditIcon={this.state.isEditModeEnabled}
               onPress={() => {

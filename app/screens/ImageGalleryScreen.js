@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import Gallery from 'react-native-photo-gallery';
+import {EnvironmentConfiguration} from '../EnvironmentConfiguration';
 
 export class ImageGalleryScreen extends Component {
   constructor(props) {
@@ -19,8 +20,8 @@ export class ImageGalleryScreen extends Component {
     imageItems.forEach(function(item, index) {
       data.push({
         id: item.id,
-        image: {uri: item.path},
-        thumb: {uri: item.path},
+        image: {uri: EnvironmentConfiguration.Catalog_Image_Path + item.path},
+        thumb: {uri: EnvironmentConfiguration.Catalog_Image_Path + item.path},
       });
     });
   }

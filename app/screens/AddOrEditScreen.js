@@ -9,7 +9,9 @@ import {
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import {CatalogDataService} from '../data-service/catalog-service';
+import {ImageUploadService} from '../data-service/image-upload-service';
 import {GlobalStyles} from '../Styles';
+import {EnvironmentConfiguration} from '../EnvironmentConfiguration';
 
 export class AddOrEditScreen extends Component {
   constructor(props) {
@@ -37,6 +39,7 @@ export class AddOrEditScreen extends Component {
   addImageInTheList(image) {
     newImage = {
       path: image.path,
+      imageOnDevice: image,
     };
     catalogItem.images[catalogItem.images.length - 1] = newImage;
     this.insertAddImageCellItem();
@@ -61,7 +64,6 @@ export class AddOrEditScreen extends Component {
     if (catalogItem.images.length > 1) {
       catalogItem.images.pop();
       catalogItem.thumbnail = catalogItem.images[0].path;
-      console.log(catalogItem.images[0].path);
       if (catalogItem.id == null) {
         this.addCatalog(catalogItem);
       } else {
@@ -75,27 +77,57 @@ export class AddOrEditScreen extends Component {
   }
 
   addCatalog(catalog) {
-    dataService = new CatalogDataService();
-    dataService
-      .addCatalog(catalog)
-      .then(_ => {
-        this.props.navigation?.goBack();
+    this.uploadImages(catalog.images)
+      .then(success => {
+        catalog.thumbnail = catalog.images[0].path;
+        dataService = new CatalogDataService();
+        dataService
+          .addCatalog(catalog)
+          .then(_ => {
+            this.props.navigation?.goBack();
+          })
+          .catch(error => {
+            console.log('Error in adding the catalog');
+          });
       })
       .catch(error => {
-        console.log(error);
+        console.log('Error in uploading the images');
       });
   }
 
   updateCatalog(catalog) {
-    dataService = new CatalogDataService();
-    dataService
-      .updateCatalog(catalog)
-      .then(_ => {
-        this.props.navigation?.goBack();
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    imagesToUpload = catalog.images.filter(image => {
+      return image.imageOnDevice;
+    });
+
+    if (imagesToUpload) {
+      this.uploadImages(imagesToUpload)
+        .then(success => {
+          catalog.thumbnail = catalog.images[0].path;
+          dataService = new CatalogDataService();
+          dataService
+            .updateCatalog(catalog)
+            .then(_ => {
+              this.props.navigation?.goBack();
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        })
+        .catch(error => {
+          console.log('Error in uploading the images');
+        });
+    } else {
+      dataService = new CatalogDataService();
+      dataService
+        .updateCatalog(catalog)
+        .then(_ => {
+          this.props.navigation?.goBack();
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   }
 
   deleteCatalog(catalogId) {
@@ -108,6 +140,23 @@ export class AddOrEditScreen extends Component {
       .catch(error => {
         console.log(error);
       });
+  }
+
+  uploadImages(images) {
+    imageUploadService = new ImageUploadService();
+    return Promise.all(
+      images.map(image => {
+        return imageUploadService
+          .uploadImage(image.imageOnDevice)
+          .then(fileName => {
+            image.path = fileName;
+            delete image.imageOnDevice;
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }),
+    );
   }
 
   render() {
@@ -128,7 +177,12 @@ export class AddOrEditScreen extends Component {
                   <View style={styles.listItemOutline}>
                     <Image
                       style={styles.addedImage}
-                      source={{uri: item.path}}></Image>
+                      source={{
+                        uri: item.imageOnDevice
+                          ? item.path
+                          : EnvironmentConfiguration.Catalog_Image_Path +
+                            item.path,
+                      }}></Image>
                     <TouchableOpacity
                       style={styles.deleteCta}
                       activeOpacity={0.2}
