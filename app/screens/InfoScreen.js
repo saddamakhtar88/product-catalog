@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, TextInput} from 'react-native';
+import {Image, StyleSheet, View, TextInput} from 'react-native';
 
 export class InfoScreen extends Component {
   constructor(props) {
@@ -14,6 +14,9 @@ export class InfoScreen extends Component {
   render() {
     return (
       <View style={styles.screenContainer}>
+        <Image
+          style={styles.backgroundImage}
+          source={require('../images/background.jpg')}></Image>
         <TextInput
           autoFocus={true}
           style={{
@@ -70,6 +73,15 @@ export class InfoScreen extends Component {
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
+  },
+  backgroundImage: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    resizeMode: 'repeat',
+    opacity: 0.2,
   },
   textBox: {
     backgroundColor: 'white',

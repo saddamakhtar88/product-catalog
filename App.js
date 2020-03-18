@@ -12,6 +12,7 @@ import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
+import {GlobalStyles} from './app/Styles';
 import {HomeScreen} from './app/screens/HomeScreen';
 import {ImageGalleryScreen} from './app/screens/ImageGalleryScreen';
 import {AddOrEditScreen} from './app/screens/AddOrEditScreen';
@@ -37,7 +38,7 @@ function MainStackScreen() {
     <MainStack.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: 'cornflowerblue',
+          backgroundColor: GlobalStyles.Color.Primary,
         },
         headerBackTitleStyle: {
           color: 'white',

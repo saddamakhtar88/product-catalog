@@ -9,10 +9,12 @@ import {
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import {CatalogDataService} from '../data-service/catalog-service';
+import {GlobalStyles} from '../Styles';
 
 export class AddOrEditScreen extends Component {
   constructor(props) {
     super();
+
     NewItemCellId = 'add-new-item-cell';
     catalogItem = null;
     if (props.route.params == null) {
@@ -77,7 +79,7 @@ export class AddOrEditScreen extends Component {
     dataService
       .addCatalog(catalog)
       .then(_ => {
-        navigation?.goBack();
+        this.props.navigation?.goBack();
       })
       .catch(error => {
         console.log(error);
@@ -89,7 +91,7 @@ export class AddOrEditScreen extends Component {
     dataService
       .updateCatalog(catalog)
       .then(_ => {
-        navigation?.goBack();
+        this.props.navigation?.goBack();
       })
       .catch(error => {
         console.log(error);
@@ -101,7 +103,7 @@ export class AddOrEditScreen extends Component {
     dataService
       .deleteCatalog(catalogId)
       .then(_ => {
-        navigation?.goBack();
+        this.props.navigation?.goBack();
       })
       .catch(error => {
         console.log(error);
@@ -134,8 +136,8 @@ export class AddOrEditScreen extends Component {
                         this.removeImageFromTheList(item, index);
                       }}>
                       <Image
-                        style={styles.deleteCta}
-                        source={require('../images/delete.png')}></Image>
+                        style={styles.deleteCtaImage}
+                        source={require('../images/delete_white.png')}></Image>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -198,7 +200,7 @@ export class AddOrEditScreen extends Component {
           style={[styles.floatingButton, styles.infoButton]}
           activeOpacity={0.8}
           onPress={() => {
-            navigation?.navigate('Info', catalogItem);
+            this.props.navigation?.navigate('Info', catalogItem);
           }}>
           <Image
             style={[styles.floatingButtonImage]}
@@ -259,7 +261,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'slategray',
     borderWidth: 1.0,
     borderStyle: 'dashed',
-    borderColor: 'black',
+    borderColor: 'white',
     borderRadius: 8,
   },
   addedImage: {
@@ -269,11 +271,22 @@ const styles = StyleSheet.create({
   },
   deleteCta: {
     position: 'absolute',
-    height: 20,
-    width: 20,
+    height: 24,
+    width: 24,
     margin: 4,
     top: 0,
     right: 0,
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    borderRadius: 4,
+    borderWidth: 0.5,
+    borderStyle: 'dashed',
+    borderColor: 'white',
+  },
+  deleteCtaImage: {
+    height: 20,
+    width: 20,
+    alignSelf: 'center',
   },
   cameraCTA: {
     resizeMode: 'contain',
@@ -294,7 +307,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 60,
     height: 50,
-    backgroundColor: 'cornflowerblue',
+    backgroundColor: GlobalStyles.Color.Primary,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 8,

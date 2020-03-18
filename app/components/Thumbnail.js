@@ -8,8 +8,7 @@ export function Thumbnail({
   label,
   onPress,
   showEditIcon,
-  onEditPress,
-  onInfoPress,
+  onBottomPress,
 }) {
   navigation = useNavigation();
 
@@ -19,24 +18,19 @@ export function Thumbnail({
         <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
           <Image style={styles.image} source={imageUri}></Image>
         </TouchableOpacity>
-
-        {showEditIcon ? (
-          <TouchableOpacity
-            style={styles.editCta}
-            activeOpacity={0.8}
-            onPress={onEditPress}>
-            <Image
-              style={styles.editCta}
-              source={require('../images/edit.png')}></Image>
-          </TouchableOpacity>
-        ) : null}
         <TouchableOpacity
           style={styles.bottomBar}
           activeOpacity={0.8}
-          onPress={onInfoPress}>
-          <Image
-            style={styles.cta}
-            source={require('../images/info.png')}></Image>
+          onPress={onBottomPress}>
+          {showEditIcon ? (
+            <Image
+              style={styles.editCtaImage}
+              source={require('../images/edit.png')}></Image>
+          ) : (
+            <Image
+              style={styles.cta}
+              source={require('../images/info.png')}></Image>
+          )}
           <Text style={styles.label}>{label}</Text>
         </TouchableOpacity>
       </View>
@@ -85,10 +79,21 @@ const styles = StyleSheet.create({
   },
   editCta: {
     position: 'absolute',
-    height: 20,
-    width: 20,
+    height: 24,
+    width: 24,
     margin: 4,
     top: 0,
     right: 0,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    borderRadius: 4,
+    borderWidth: 0.5,
+    borderStyle: 'dashed',
+    borderColor: 'black',
+  },
+  editCtaImage: {
+    height: 20,
+    width: 20,
+    alignSelf: 'center',
   },
 });

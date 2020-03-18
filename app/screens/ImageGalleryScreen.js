@@ -32,7 +32,7 @@ export class ImageGalleryScreen extends Component {
           style={styles.closeButton}
           color="white"
           title="X"
-          onPress={() => navigation?.goBack()}
+          onPress={() => this.props.navigation?.goBack()}
         />
         <Gallery data={data} />
       </SafeAreaView>

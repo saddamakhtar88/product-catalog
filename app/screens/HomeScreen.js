@@ -7,14 +7,15 @@ import {
   TouchableOpacity,
   View,
   ScrollView,
+  StatusBar,
 } from 'react-native';
 import {Thumbnail} from '../components/Thumbnail';
 import {CatalogDataService} from '../data-service/catalog-service';
+import {GlobalStyles} from '../Styles';
 
 export class HomeScreen extends Component {
   constructor() {
     super();
-
     this.state = {
       isEditModeEnabled: false,
       catalogList: [],
@@ -37,7 +38,7 @@ export class HomeScreen extends Component {
 
   componentDidMount() {
     this.loadData();
-    const unsubscribe = navigation?.addListener('focus', () => {
+    const unsubscribe = this.props.navigation?.addListener('focus', () => {
       {
         this.loadData();
       }
@@ -57,6 +58,10 @@ export class HomeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor={GlobalStyles.Color.Primary}
+        />
         <Image
           style={styles.backgroundImage}
           source={require('../images/background.jpg')}></Image>
@@ -71,20 +76,24 @@ export class HomeScreen extends Component {
               label={item.title}
               showEditIcon={this.state.isEditModeEnabled}
               onPress={() => {
-                navigation?.navigate('ImageGallery', item.images);
+                this.props.navigation?.navigate('ImageGallery', item.images);
               }}
-              onEditPress={() => {
-                navigation?.navigate('AddOrEdit', item);
-              }}
-              onInfoPress={() => {
-                navigation?.navigate('Info', {...item, isEditable: false});
+              onBottomPress={() => {
+                if (this.state.isEditModeEnabled) {
+                  this.props.navigation?.navigate('AddOrEdit', item);
+                } else {
+                  this.props.navigation?.navigate('Info', {
+                    ...item,
+                    isEditable: false,
+                  });
+                }
               }}></Thumbnail>
           )}></FlatList>
         {this.state.isEditModeEnabled ? (
           <View style={[styles.floatingButton, styles.shadow]}>
             <TouchableOpacity
               onPress={() => {
-                navigation?.navigate('AddOrEdit');
+                this.props.navigation?.navigate('AddOrEdit');
               }}>
               <Text style={styles.floatingButtonText}>+</Text>
             </TouchableOpacity>
@@ -117,7 +126,7 @@ export class HomeScreen extends Component {
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={() => {
-                // navigation?.navigate('ImageGallery', item.images);
+                // this.props.navigation?.navigate('ImageGallery', item.images);
               }}>
               <Image
                 style={[styles.cta, styles.contactCTA, styles.shadow]}
@@ -126,11 +135,11 @@ export class HomeScreen extends Component {
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={() => {
-                // navigation?.navigate('ImageGallery', item.images);
+                // this.props.navigation?.navigate('ImageGallery', item.images);
               }}>
               <Image
                 style={[styles.cta, styles.editCTA, styles.shadow]}
-                source={require('../images/edit_2.png')}></Image>
+                source={require('../images/edit.png')}></Image>
             </TouchableOpacity>
           </ScrollView>
         </View>
@@ -210,7 +219,7 @@ const styles = StyleSheet.create({
     height: 50,
     bottom: 100,
     right: 12,
-    backgroundColor: 'cornflowerblue',
+    backgroundColor: GlobalStyles.Color.Primary,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 8,

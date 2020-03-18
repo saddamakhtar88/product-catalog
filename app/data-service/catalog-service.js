@@ -1,9 +1,8 @@
-import React from 'react';
 import {EnvironmentConfiguration} from '../EnvironmentConfiguration';
 
 export class CatalogDataService {
   constructor() {
-    baseurl = new EnvironmentConfiguration().CatalogAPI_Base_URL;
+    baseurl = EnvironmentConfiguration.CatalogAPI_Base_URL;
     catalogEndPoint = baseurl + 'Catalog';
   }
 
