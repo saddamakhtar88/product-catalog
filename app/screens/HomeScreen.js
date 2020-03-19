@@ -160,22 +160,24 @@ export class HomeScreen extends Component {
             }}>
             <View style={styles.scrollInset}></View>
             <TouchableOpacity
+              style={[styles.cta, styles.shadow]}
               activeOpacity={0.8}
               onPress={() => {
                 // this.props.navigation?.navigate('ImageGallery', item.images);
               }}>
               <Image
-                style={[styles.cta, styles.contactCTA, styles.shadow]}
+                style={[styles.contactCTA]}
                 source={require('../images/contact-us.png')}></Image>
             </TouchableOpacity>
             <TouchableOpacity
+              style={[styles.cta, styles.shadow]}
               activeOpacity={0.8}
               onPress={() => {
                 // this.props.navigation?.navigate('ImageGallery', item.images);
               }}>
               <Image
-                style={[styles.cta, styles.editCTA, styles.shadow]}
-                source={require('../images/edit.png')}></Image>
+                style={[styles.editCTA]}
+                source={require('../images/edit_white.png')}></Image>
             </TouchableOpacity>
           </ScrollView>
         </View>
@@ -228,18 +230,24 @@ const styles = StyleSheet.create({
   },
   cta: {
     marginRight: 12,
-    padding: 4,
-    resizeMode: 'contain',
-    alignSelf: 'center',
+    justifyContent: 'center',
     width: 60,
     height: 50,
-    backgroundColor: 'white',
     borderRadius: 8,
-    borderColor: GlobalStyles.Color.Primary,
-    borderWidth: 2,
+    borderColor: 'white',
+    borderWidth: 1,
+    backgroundColor: GlobalStyles.Color.Primary,
   },
-  contactCTA: {},
-  editCTA: {},
+  contactCTA: {
+    width: 60,
+    height: 50,
+    resizeMode: 'contain',
+  },
+  editCTA: {
+    width: 60,
+    height: 34,
+    resizeMode: 'contain',
+  },
   logoContainer: {
     paddingLeft: 12,
     height: '100%',
