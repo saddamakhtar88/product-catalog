@@ -20,18 +20,15 @@ import {LoadingOverlay} from '../components/LoadingOverlay';
 export class HomeScreen extends Component {
   constructor() {
     super();
-    refreshing = false;
     this.state = {
       isEditModeEnabled: false,
       catalogList: [],
       isLoading: false,
+      isRefreshing: false,
     };
   }
 
   loadData() {
-    this.setState(previousState => ({
-      isLoading: true,
-    }));
     dataService = new CatalogDataService();
     dataService
       .getCatalogs()
@@ -39,14 +36,29 @@ export class HomeScreen extends Component {
         this.setState(previousState => ({
           catalogList: catalogs,
           isLoading: false,
+          isRefreshing: false,
         }));
       })
       .catch(error => {
+        this.setState(previousState => ({
+          isLoading: false,
+          isRefreshing: false,
+        }));
         this.showGenericErrorMessage();
       });
   }
 
+  onRefresh() {
+    this.setState(_ => ({
+      isRefreshing: true,
+    }));
+    this.loadData();
+  }
+
   componentDidMount() {
+    this.setState(previousState => ({
+      isLoading: true,
+    }));
     this.loadData();
     const unsubscribe = this.props.navigation?.addListener('focus', () => {
       {
@@ -84,6 +96,12 @@ export class HomeScreen extends Component {
           numColumns={2}
           data={this.state.catalogList}
           keyExtractor={item => item.id}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.isRefreshing}
+              onRefresh={this.onRefresh.bind(this)}
+            />
+          }
           renderItem={({item}) => (
             <Thumbnail
               style={styles.thumbnail}
