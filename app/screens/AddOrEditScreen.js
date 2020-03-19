@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {
+  Alert,
   FlatList,
   Image,
   StyleSheet,
@@ -8,6 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
+import {LoadingOverlay} from '../components/LoadingOverlay';
 import {CatalogDataService} from '../data-service/catalog-service';
 import {ImageUploadService} from '../data-service/image-upload-service';
 import {GlobalStyles} from '../Styles';
@@ -33,6 +35,7 @@ export class AddOrEditScreen extends Component {
     this.insertAddImageCellItem();
     this.state = {
       catalogItem: catalogItem,
+      isLoading: false,
     };
   }
 
@@ -62,6 +65,9 @@ export class AddOrEditScreen extends Component {
 
   onSavePress() {
     if (catalogItem.images.length > 1) {
+      this.setState(previousState => ({
+        isLoading: true,
+      }));
       catalogItem.images.pop();
       catalogItem.thumbnail = catalogItem.images[0].path;
       if (catalogItem.id == null) {
@@ -69,6 +75,8 @@ export class AddOrEditScreen extends Component {
       } else {
         this.updateCatalog(catalogItem);
       }
+    } else {
+      Alert.alert('Info', 'Please add at least one image !!!');
     }
   }
 
@@ -87,11 +95,17 @@ export class AddOrEditScreen extends Component {
             this.props.navigation?.goBack();
           })
           .catch(error => {
-            console.log('Error in adding the catalog');
+            this.setState(previousState => ({
+              isLoading: false,
+            }));
+            this.showGenericErrorMessage();
           });
       })
       .catch(error => {
-        console.log('Error in uploading the images');
+        this.setState(previousState => ({
+          isLoading: false,
+        }));
+        this.showGenericErrorMessage();
       });
   }
 
@@ -111,11 +125,17 @@ export class AddOrEditScreen extends Component {
               this.props.navigation?.goBack();
             })
             .catch(error => {
-              console.log(error);
+              this.setState(previousState => ({
+                isLoading: false,
+              }));
+              this.showGenericErrorMessage();
             });
         })
         .catch(error => {
-          console.log('Error in uploading the images');
+          this.setState(previousState => ({
+            isLoading: false,
+          }));
+          this.showGenericErrorMessage();
         });
     } else {
       dataService = new CatalogDataService();
@@ -125,12 +145,18 @@ export class AddOrEditScreen extends Component {
           this.props.navigation?.goBack();
         })
         .catch(error => {
-          console.log(error);
+          this.setState(previousState => ({
+            isLoading: false,
+          }));
+          this.showGenericErrorMessage();
         });
     }
   }
 
   deleteCatalog(catalogId) {
+    this.setState(previousState => ({
+      isLoading: true,
+    }));
     dataService = new CatalogDataService();
     dataService
       .deleteCatalog(catalogId)
@@ -138,7 +164,7 @@ export class AddOrEditScreen extends Component {
         this.props.navigation?.goBack();
       })
       .catch(error => {
-        console.log(error);
+        this.showGenericErrorMessage();
       });
   }
 
@@ -153,10 +179,14 @@ export class AddOrEditScreen extends Component {
             delete image.imageOnDevice;
           })
           .catch(error => {
-            console.log(error);
+            this.showGenericErrorMessage();
           });
       }),
     );
+  }
+
+  showGenericErrorMessage() {
+    Alert.alert('Error', 'Something went wrong.');
   }
 
   render() {
@@ -282,6 +312,9 @@ export class AddOrEditScreen extends Component {
               style={[styles.floatingButtonImage]}
               source={require('../images/delete_white.png')}></Image>
           </TouchableOpacity>
+        ) : null}
+        {this.state.isLoading == true ? (
+          <LoadingOverlay></LoadingOverlay>
         ) : null}
       </View>
     );

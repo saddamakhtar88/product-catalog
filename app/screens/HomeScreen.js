@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import {
+  Alert,
   FlatList,
   Image,
+  RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -13,27 +15,34 @@ import {Thumbnail} from '../components/Thumbnail';
 import {CatalogDataService} from '../data-service/catalog-service';
 import {GlobalStyles} from '../Styles';
 import {EnvironmentConfiguration} from '../EnvironmentConfiguration';
+import {LoadingOverlay} from '../components/LoadingOverlay';
 
 export class HomeScreen extends Component {
   constructor() {
     super();
+    refreshing = false;
     this.state = {
       isEditModeEnabled: false,
       catalogList: [],
+      isLoading: false,
     };
   }
 
   loadData() {
+    this.setState(previousState => ({
+      isLoading: true,
+    }));
     dataService = new CatalogDataService();
     dataService
       .getCatalogs()
       .then(catalogs => {
         this.setState(previousState => ({
           catalogList: catalogs,
+          isLoading: false,
         }));
       })
       .catch(error => {
-        console.log(error);
+        this.showGenericErrorMessage();
       });
   }
 
@@ -56,6 +65,11 @@ export class HomeScreen extends Component {
       scrollEvent.nativeEvent.contentSize.width
     );
   }
+
+  showGenericErrorMessage() {
+    Alert.alert('Error', 'Something went wrong.');
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -147,6 +161,9 @@ export class HomeScreen extends Component {
             </TouchableOpacity>
           </ScrollView>
         </View>
+        {this.state.isLoading == true ? (
+          <LoadingOverlay></LoadingOverlay>
+        ) : null}
       </View>
     );
   }
