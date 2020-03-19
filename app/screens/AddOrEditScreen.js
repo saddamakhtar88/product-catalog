@@ -68,12 +68,13 @@ export class AddOrEditScreen extends Component {
       this.setState(previousState => ({
         isLoading: true,
       }));
-      catalogItem.images.pop();
-      catalogItem.thumbnail = catalogItem.images[0].path;
-      if (catalogItem.id == null) {
-        this.addCatalog(catalogItem);
+      catalogItemCopy = JSON.parse(JSON.stringify(catalogItem));
+      catalogItemCopy.images.pop();
+      catalogItemCopy.thumbnail = catalogItem.images[0].path;
+      if (catalogItemCopy.id == null) {
+        this.addCatalog(catalogItemCopy);
       } else {
-        this.updateCatalog(catalogItem);
+        this.updateCatalog(catalogItemCopy);
       }
     } else {
       Alert.alert('Info', 'Please add at least one image !!!');
@@ -177,9 +178,6 @@ export class AddOrEditScreen extends Component {
           .then(fileName => {
             image.path = fileName;
             delete image.imageOnDevice;
-          })
-          .catch(error => {
-            this.showGenericErrorMessage();
           });
       }),
     );

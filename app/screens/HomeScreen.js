@@ -20,6 +20,9 @@ import {LoadingOverlay} from '../components/LoadingOverlay';
 export class HomeScreen extends Component {
   constructor() {
     super();
+
+    focusSubscription = null;
+
     this.state = {
       isEditModeEnabled: false,
       catalogList: [],
@@ -60,12 +63,9 @@ export class HomeScreen extends Component {
       isLoading: true,
     }));
     this.loadData();
-    const unsubscribe = this.props.navigation?.addListener('focus', () => {
-      {
-        this.loadData();
-      }
-    });
   }
+
+  componentWillUnmount() {}
 
   scrollViewHasReachedEnd(scrollEvent) {
     if (!scrollEvent.nativeEvent) {
