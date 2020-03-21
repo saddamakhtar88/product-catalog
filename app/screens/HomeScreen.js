@@ -105,10 +105,9 @@ export class HomeScreen extends Component {
           renderItem={({item}) => (
             <Thumbnail
               style={styles.thumbnail}
-              imageUri={{
-                uri:
-                  EnvironmentConfiguration.Catalog_Image_Path + item.thumbnail,
-              }}
+              imageUri={
+                EnvironmentConfiguration.Catalog_Image_Path + item.thumbnail
+              }
               label={item.title}
               showEditIcon={this.state.isEditModeEnabled}
               onPress={() => {
@@ -163,7 +162,9 @@ export class HomeScreen extends Component {
               style={[styles.cta, styles.shadow]}
               activeOpacity={0.8}
               onPress={() => {
-                // this.props.navigation?.navigate('ImageGallery', item.images);
+                this.props.navigation?.navigate('ContactUs', {
+                  isAdminUser: this.state.isEditModeEnabled,
+                });
               }}>
               <Image
                 style={[styles.contactCTA]}

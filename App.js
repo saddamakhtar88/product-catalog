@@ -17,6 +17,9 @@ import {HomeScreen} from './app/screens/HomeScreen';
 import {ImageGalleryScreen} from './app/screens/ImageGalleryScreen';
 import {AddOrEditScreen} from './app/screens/AddOrEditScreen';
 import {InfoScreen} from './app/screens/InfoScreen';
+import {ContactUsScreen} from './app/screens/ContactUs';
+import {MessageUsScreen} from './app/screens/MessageUs';
+import {MessagesScreen} from './app/screens/Messages';
 
 const MainStack = createStackNavigator();
 const RootStack = createStackNavigator();
@@ -57,6 +60,18 @@ function MainStackScreen() {
         name="Info"
         component={InfoScreen}
         options={{title: 'Info'}}></MainStack.Screen>
+      <MainStack.Screen
+        name="ContactUs"
+        component={ContactUsScreen}
+        options={{title: 'Contact Us'}}></MainStack.Screen>
+      <MainStack.Screen
+        name="MessageUs"
+        component={MessageUsScreen}
+        options={{title: 'Message'}}></MainStack.Screen>
+      <MainStack.Screen
+        name="Messages"
+        component={MessagesScreen}
+        options={{title: 'Messages'}}></MainStack.Screen>
     </MainStack.Navigator>
   );
 }
