@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {GlobalStyles} from '../Styles';
+import FastImage from 'react-native-fast-image';
 
 export function Thumbnail({
   style,
@@ -17,7 +18,10 @@ export function Thumbnail({
     <View style={[style, styles.container]}>
       <View style={styles.containerBoundary}>
         <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
-          <Image style={styles.image} source={imageUri}></Image>
+          <FastImage
+            style={styles.image}
+            source={{uri: imageUri, priority: FastImage.priority.normal}}
+          />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.bottomBar}
