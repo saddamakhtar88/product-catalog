@@ -8,11 +8,10 @@ import {
   Text,
   View,
 } from 'react-native';
-import {Thumbnail} from '../components/Thumbnail';
 import {CatalogDataService} from '../data-service/catalog-service';
 import {GlobalStyles} from '../Styles';
-import {EnvironmentConfiguration} from '../EnvironmentConfiguration';
 import {LoadingOverlay} from '../components/LoadingOverlay';
+import {MessageService} from '../data-service/message-service';
 
 export class MessagesScreen extends Component {
   constructor() {
@@ -21,16 +20,16 @@ export class MessagesScreen extends Component {
     focusSubscription = null;
 
     this.state = {
-      messageList: [1, 2, 4],
+      messageList: [],
       isLoading: false,
       isRefreshing: false,
     };
   }
 
   loadData() {
-    dataService = new CatalogDataService();
+    dataService = new MessageService();
     dataService
-      .getCatalogs()
+      .getMessages()
       .then(messages => {
         this.setState(previousState => ({
           messageList: messages,
@@ -67,6 +66,13 @@ export class MessagesScreen extends Component {
     Alert.alert('Error', 'Something went wrong.');
   }
 
+  getFormattedDataStr(dataTimeStr) {
+    date = new Date(dataTimeStr);
+    return (
+      date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear()
+    );
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -84,13 +90,22 @@ export class MessagesScreen extends Component {
           }
           renderItem={({item}) => (
             <View style={styles.messageItem}>
-              <Text style={styles.messageFrom}>From</Text>
-              <Text style={styles.messageContact}>Contact</Text>
-              <Text style={styles.message}>
-                Message Text Message Text Message Text Message Text Message Text
+              <Text style={styles.messageFrom}>{item.name}</Text>
+              {item.emailID ? (
+                <Text style={styles.messageContact}>{item.emailID}</Text>
+              ) : null}
+              {item.phoneNumber ? (
+                <Text style={styles.messageContact}>{item.phoneNumber}</Text>
+              ) : null}
+              <Text style={styles.message}>{item.messageText}</Text>
+              <Text style={styles.messagePostedOn}>
+                Posted On: {this.getFormattedDataStr(item.postedDate)}
               </Text>
             </View>
           )}></FlatList>
+        {this.state.isLoading == true ? (
+          <LoadingOverlay></LoadingOverlay>
+        ) : null}
       </View>
     );
   }
@@ -130,5 +145,11 @@ const styles = StyleSheet.create({
   message: {
     fontSize: 18,
     marginBottom: 4,
+    marginTop: 8,
+  },
+  messagePostedOn: {
+    fontSize: 16,
+    alignSelf: 'flex-end',
+    marginTop: 16,
   },
 });

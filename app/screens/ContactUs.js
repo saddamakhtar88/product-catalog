@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {
+  Alert,
   Image,
   StyleSheet,
   View,
@@ -7,10 +8,54 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {GlobalStyles} from '../Styles';
+import {ContactService} from '../data-service/contact-service';
+import {LoadingOverlay} from '../components/LoadingOverlay';
 
 export class ContactUsScreen extends Component {
   constructor() {
     super();
+
+    this.state = {
+      contact: {
+        phoneNumber: '',
+        emailID: '',
+        additionalInfo: '',
+      },
+      isLoading: false,
+    };
+  }
+
+  componentDidMount() {
+    this.setState(previousState => ({
+      isLoading: true,
+    }));
+    this.loadData();
+  }
+
+  loadData() {
+    dataService = new ContactService();
+    dataService
+      .getContact()
+      .then(contact => {
+        if (!contact) {
+          contact = this.state.contact;
+        }
+        this.setState(previousState => ({
+          contact: contact,
+          isLoading: false,
+        }));
+      })
+      .catch(error => {
+        this.setState(previousState => ({
+          isLoading: false,
+          isRefreshing: false,
+        }));
+        this.showGenericErrorMessage();
+      });
+  }
+
+  showGenericErrorMessage() {
+    Alert.alert('Error', 'Something went wrong.');
   }
 
   render() {
@@ -18,16 +63,20 @@ export class ContactUsScreen extends Component {
       <View style={styles.container}>
         <Image
           style={styles.backgroundImage}
-          source={require('../images/background.jpg')}></Image>
+          source={require('../images/background.jpg')}
+        />
         <View style={styles.row}>
           <Image
             style={styles.rowIcon}
-            source={require('../images/phone.png')}></Image>
+            source={require('../images/phone.png')}
+          />
           <TextInput
             style={styles.rowText}
             placeholder="Phone No."
             autoCorrect={false}
-            editable={this.props.route.params.isAdminUser}></TextInput>
+            editable={false} //{this.props.route.params.isAdminUser}
+            value={this.state.contact.phoneNumber}
+          />
         </View>
         <View style={styles.rowdivider}></View>
         <View style={styles.row}>
@@ -38,7 +87,9 @@ export class ContactUsScreen extends Component {
             style={styles.rowText}
             placeholder="Email Address"
             autoCorrect={false}
-            editable={this.props.route.params.isAdminUser}></TextInput>
+            editable={this.props.route.params.isAdminUser}
+            value={this.state.contact.emailID}
+          />
         </View>
         <View style={styles.rowdivider}></View>
         <View style={styles.row}>
@@ -51,7 +102,9 @@ export class ContactUsScreen extends Component {
             autoCorrect={false}
             multiline
             numberOfLines={8}
-            editable={this.props.route.params.isAdminUser}></TextInput>
+            editable={this.props.route.params.isAdminUser}
+            value={this.state.contact.additionalInfo}
+          />
         </View>
         <View style={styles.rowdivider}></View>
         <TouchableOpacity
@@ -68,6 +121,9 @@ export class ContactUsScreen extends Component {
             style={[styles.floatingButtonImage]}
             source={require('../images/send_message.png')}></Image>
         </TouchableOpacity>
+        {this.state.isLoading == true ? (
+          <LoadingOverlay></LoadingOverlay>
+        ) : null}
       </View>
     );
   }

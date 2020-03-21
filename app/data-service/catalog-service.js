@@ -1,19 +1,10 @@
 import {EnvironmentConfiguration} from '../EnvironmentConfiguration';
-import AsyncStorage from '@react-native-community/async-storage';
-import {Cache} from 'react-native-cache';
+import {DataCache} from './cache-service';
 
 export class CatalogDataService {
   constructor() {
     baseurl = EnvironmentConfiguration.CatalogAPI_Base_URL;
     catalogEndPoint = baseurl + 'Catalog';
-
-    cache = new Cache({
-      namespace: 'ProductCatalog',
-      policy: {
-        maxEntries: 500,
-      },
-      backend: AsyncStorage,
-    });
   }
 
   getCatalogs() {
@@ -23,7 +14,7 @@ export class CatalogDataService {
           if (response.ok) {
             return response.json();
           } else {
-            cache.getItem(catalogEndPoint, function(err, value) {
+            DataCache.getItem(catalogEndPoint, function(err, value) {
               if (value) {
                 resolve(JSON.parse(value));
               } else {
@@ -33,13 +24,13 @@ export class CatalogDataService {
           }
         })
         .then(result => {
-          cache.setItem(catalogEndPoint, JSON.stringify(result), function(
+          DataCache.setItem(catalogEndPoint, JSON.stringify(result), function(
             _,
           ) {});
           resolve(result);
         })
         .catch(error => {
-          cache.getItem(catalogEndPoint, function(err, value) {
+          DataCache.getItem(catalogEndPoint, function(err, value) {
             if (value) {
               resolve(JSON.parse(value));
             } else {
