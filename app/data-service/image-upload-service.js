@@ -8,10 +8,11 @@ export class ImageUploadService {
 
   uploadImage(image) {
     const formData = new FormData();
+    const imageName = image.mime.replace('/', '.');
     formData.append('file', {
       uri: image.path,
       type: image.mime, // or photo.type
-      name: image.filename,
+      name: imageName,
     });
     return fetch(uploadEndPoint, {
       method: 'POST',
