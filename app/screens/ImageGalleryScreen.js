@@ -1,15 +1,7 @@
 import React, {Component} from 'react';
-import {
-  FlatList,
-  Image,
-  StyleSheet,
-  View,
-  Dimensions,
-  Button,
-  Text,
-} from 'react-native';
-import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
-import Gallery from 'react-native-photo-gallery';
+import {StyleSheet} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import ImageView from 'react-native-image-viewing';
 import {EnvironmentConfiguration} from '../EnvironmentConfiguration';
 
 export class ImageGalleryScreen extends Component {
@@ -19,9 +11,7 @@ export class ImageGalleryScreen extends Component {
     imageItems = props.route.params;
     imageItems.forEach(function(item, index) {
       data.push({
-        id: item.id,
-        image: {uri: EnvironmentConfiguration.Catalog_Image_Path + item.path},
-        thumb: {uri: EnvironmentConfiguration.Catalog_Image_Path + item.path},
+        uri: EnvironmentConfiguration.Catalog_Image_Path + item.path,
       });
     });
   }
@@ -29,13 +19,12 @@ export class ImageGalleryScreen extends Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        <Button
-          style={styles.closeButton}
-          color="white"
-          title="X"
-          onPress={() => this.props.navigation?.goBack()}
+        <ImageView
+          images={data}
+          imageIndex={0}
+          visible={true}
+          onRequestClose={() => this.props.navigation?.goBack()}
         />
-        <Gallery data={data} />
       </SafeAreaView>
     );
   }
