@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import {Thumbnail} from '../components/Thumbnail';
 import {CatalogDataService} from '../data-service/catalog-service';
+import {AuthenticationService} from '../data-service/authentication-service';
 import {GlobalStyles} from '../Styles';
 import {EnvironmentConfiguration} from '../EnvironmentConfiguration';
 import {LoadingOverlay} from '../components/LoadingOverlay';
@@ -63,9 +64,19 @@ export class HomeScreen extends Component {
       isLoading: true,
     }));
     this.loadData();
+    focusSubscription = this.props.navigation?.addListener('focus', () => {
+      {
+        if (this.props?.route?.params?.isFromLoginScreen) {
+          this.enableAdminMode(true);
+        }
+        this.loadData();
+      }
+    });
   }
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    focusSubscription?.remove();
+  }
 
   scrollViewHasReachedEnd(scrollEvent) {
     if (!scrollEvent.nativeEvent) {
@@ -76,6 +87,21 @@ export class HomeScreen extends Component {
         scrollEvent.nativeEvent.contentOffset.x >=
       scrollEvent.nativeEvent.contentSize.width
     );
+  }
+
+  enableAdminMode(flag) {
+    if (flag === true) {
+      authService = new AuthenticationService();
+      authService.isAdminUser().then(result => {
+        this.setState(previousState => ({
+          isEditModeEnabled: result,
+        }));
+      });
+    } else {
+      this.setState(previousState => ({
+        isEditModeEnabled: false,
+      }));
+    }
   }
 
   showGenericErrorMessage() {
@@ -147,15 +173,11 @@ export class HomeScreen extends Component {
             contentContainerStyle={styles.footerScrollContent}
             onMomentumScrollEnd={scrollevent => {
               hasReachedEnd = this.scrollViewHasReachedEnd(scrollevent);
-              this.setState(previousState => ({
-                isEditModeEnabled: hasReachedEnd,
-              }));
+              this.enableAdminMode(hasReachedEnd);
             }}
             onScrollEndDrag={scrollevent => {
               hasReachedEnd = this.scrollViewHasReachedEnd(scrollevent);
-              this.setState(previousState => ({
-                isEditModeEnabled: hasReachedEnd,
-              }));
+              this.enableAdminMode(hasReachedEnd);
             }}>
             <View style={styles.scrollInset}></View>
             <TouchableOpacity
@@ -174,7 +196,9 @@ export class HomeScreen extends Component {
               style={[styles.cta, styles.shadow]}
               activeOpacity={0.8}
               onPress={() => {
-                // this.props.navigation?.navigate('ImageGallery', item.images);
+                if (this.state.isEditModeEnabled === false) {
+                  this.props.navigation?.navigate('Login');
+                }
               }}>
               <Image
                 style={[styles.editCTA]}
