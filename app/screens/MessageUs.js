@@ -4,6 +4,7 @@ import {
   Image,
   StyleSheet,
   View,
+  ScrollView,
   TextInput,
   TouchableOpacity,
 } from 'react-native';
@@ -45,6 +46,9 @@ export class MessageUsScreen extends Component {
         ]);
       })
       .catch(error => {
+        this.setState(previousState => ({
+          isLoading: false,
+        }));
         this.showGenericErrorMessage();
       });
   }
@@ -56,67 +60,65 @@ export class MessageUsScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Image
-          style={styles.backgroundImage}
-          source={require('../images/background.jpg')}></Image>
-        <View style={styles.row}>
-          <TextInput
-            style={styles.rowText}
-            placeholder="Name"
-            autoCorrect={false}
-            onChangeText={text => {
-              this.setState(_ => ({
-                name: text,
-              }));
-            }}
-            value={this.state.name}
-          />
-        </View>
-        <View style={styles.rowdivider}></View>
-        <View style={styles.row}>
-          <TextInput
-            style={styles.rowText}
-            placeholder="Email"
-            autoCorrect={false}
-            onChangeText={text => {
-              this.setState(_ => ({
-                emailID: text,
-              }));
-            }}
-            value={this.state.emailID}
-          />
-        </View>
-        <View style={styles.rowdivider}></View>
-        <View style={styles.row}>
-          <TextInput
-            style={styles.rowText}
-            placeholder="Phone No."
-            autoCorrect={false}
-            onChangeText={text => {
-              this.setState(_ => ({
-                phoneNumber: text,
-              }));
-            }}
-            value={this.state.phoneNumber}
-          />
-        </View>
-        <View style={styles.rowdivider}></View>
-        <View style={styles.row}>
-          <TextInput
-            style={[styles.rowText, styles.rowMultilineText]}
-            placeholder="Write your Message here"
-            autoCorrect={false}
-            multiline
-            numberOfLines={8}
-            onChangeText={text => {
-              this.setState(_ => ({
-                messageText: text,
-              }));
-            }}
-            value={this.state.messageText}
-          />
-        </View>
-        <View style={styles.rowdivider}></View>
+        <ScrollView style={styles.scrollView}>
+          <View style={styles.row}>
+            <TextInput
+              style={styles.rowText}
+              placeholder="Name"
+              autoCorrect={false}
+              onChangeText={text => {
+                this.setState(_ => ({
+                  name: text,
+                }));
+              }}
+              value={this.state.name}
+            />
+          </View>
+          <View style={styles.rowdivider}></View>
+          <View style={styles.row}>
+            <TextInput
+              style={styles.rowText}
+              placeholder="Email"
+              autoCorrect={false}
+              onChangeText={text => {
+                this.setState(_ => ({
+                  emailID: text,
+                }));
+              }}
+              value={this.state.emailID}
+            />
+          </View>
+          <View style={styles.rowdivider}></View>
+          <View style={styles.row}>
+            <TextInput
+              style={styles.rowText}
+              placeholder="Phone No."
+              autoCorrect={false}
+              onChangeText={text => {
+                this.setState(_ => ({
+                  phoneNumber: text,
+                }));
+              }}
+              value={this.state.phoneNumber}
+            />
+          </View>
+          <View style={styles.rowdivider}></View>
+          <View style={styles.row}>
+            <TextInput
+              style={[styles.rowText, styles.rowMultilineText]}
+              placeholder="Write your Message here"
+              autoCorrect={false}
+              multiline
+              onChangeText={text => {
+                this.setState(_ => ({
+                  messageText: text,
+                }));
+              }}
+              value={this.state.messageText}
+            />
+          </View>
+          <View style={styles.rowdivider}></View>
+        </ScrollView>
         <TouchableOpacity
           style={[styles.floatingButton, styles.messageButton]}
           activeOpacity={0.8}
@@ -146,15 +148,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // padding: 12,
   },
-  backgroundImage: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    resizeMode: 'repeat',
-    opacity: 0.2,
-  },
+  scrollView: {},
   row: {
     flexDirection: 'row',
     width: '100%',
@@ -163,25 +157,23 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   rowdivider: {
-    height: 0.5,
+    height: 1,
     marginLeft: 12,
     marginRight: 12,
-    backgroundColor: GlobalStyles.Color.Secondary,
-    marginTop: 4,
+    backgroundColor: 'rgba(0,0,0,0.4)',
     marginBottom: 12,
   },
   rowText: {
     flex: 1,
     fontSize: 18,
     fontWeight: 'bold',
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
     borderRadius: 4,
   },
   rowMultilineIcon: {
     alignSelf: 'baseline',
   },
   rowMultilineText: {
-    minHeight: 100,
+    // minHeight: 100,
   },
   floatingButton: {
     position: 'absolute',

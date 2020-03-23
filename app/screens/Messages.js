@@ -76,9 +76,6 @@ export class MessagesScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Image
-          style={styles.backgroundImage}
-          source={require('../images/background.jpg')}></Image>
         <FlatList
           data={this.state.messageList}
           keyExtractor={item => item.id}
@@ -99,7 +96,7 @@ export class MessagesScreen extends Component {
               ) : null}
               <Text style={styles.message}>{item.messageText}</Text>
               <Text style={styles.messagePostedOn}>
-                Posted On: {this.getFormattedDataStr(item.postedDate)}
+                {this.getFormattedDataStr(item.postedDate)}
               </Text>
             </View>
           )}></FlatList>
@@ -115,21 +112,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  backgroundImage: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    resizeMode: 'repeat',
-    opacity: 0.2,
-  },
   messageItem: {
     flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    // backgroundColor: 'rgba(255, 255, 255, 0.8)',
     borderWidth: 0.5,
-    borderColor: GlobalStyles.Color.Secondary,
-    // borderRadius: 8,
+    borderColor: 'rgba(0,0,0,0.2)',
     padding: 8,
   },
   messageFrom: {

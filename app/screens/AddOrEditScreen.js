@@ -8,6 +8,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import ImagePicker from 'react-native-image-crop-picker';
 import {LoadingOverlay} from '../components/LoadingOverlay';
 import {CatalogDataService} from '../data-service/catalog-service';
@@ -165,6 +166,9 @@ export class AddOrEditScreen extends Component {
         this.props.navigation?.goBack();
       })
       .catch(error => {
+        this.setState(previousState => ({
+          isLoading: false,
+        }));
         this.showGenericErrorMessage();
       });
   }
@@ -203,14 +207,15 @@ export class AddOrEditScreen extends Component {
               return (
                 <View style={styles.listItem}>
                   <View style={styles.listItemOutline}>
-                    <Image
+                    <FastImage
                       style={styles.addedImage}
                       source={{
                         uri: item.imageOnDevice
                           ? item.path
                           : EnvironmentConfiguration.Catalog_Image_Path +
                             item.path,
-                      }}></Image>
+                      }}
+                    />
                     <TouchableOpacity
                       style={styles.deleteCta}
                       activeOpacity={0.2}
@@ -234,6 +239,7 @@ export class AddOrEditScreen extends Component {
                       justifyContent: 'space-around',
                     }}>
                     <TouchableOpacity
+                      style={styles.cameraCTA}
                       activeOpacity={0.2}
                       onPress={() => {
                         ImagePicker.openCamera({
@@ -245,10 +251,11 @@ export class AddOrEditScreen extends Component {
                         });
                       }}>
                       <Image
-                        style={[styles.cameraCTA]}
+                        style={styles.cameraImage}
                         source={require('../images/camera.png')}></Image>
                     </TouchableOpacity>
                     <TouchableOpacity
+                      style={styles.cameraCTA}
                       activeOpacity={0.2}
                       onPress={() => {
                         ImagePicker.openPicker({
@@ -260,7 +267,7 @@ export class AddOrEditScreen extends Component {
                         });
                       }}>
                       <Image
-                        style={[styles.cameraCTA]}
+                        style={styles.cameraImage}
                         source={require('../images/gallery.png')}></Image>
                     </TouchableOpacity>
                   </View>
@@ -347,7 +354,7 @@ const styles = StyleSheet.create({
     backgroundColor: GlobalStyles.Color.Secondary,
     borderWidth: 1.0,
     borderStyle: 'dashed',
-    borderColor: 'white',
+    borderColor: GlobalStyles.Color.Primary,
     borderRadius: 8,
   },
   addedImage: {
@@ -375,13 +382,15 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   cameraCTA: {
-    resizeMode: 'contain',
-    width: 60,
-    height: 60,
     alignSelf: 'center',
     borderWidth: 2.0,
     borderColor: 'white',
     borderRadius: 8,
+  },
+  cameraImage: {
+    width: 60,
+    height: 60,
+    resizeMode: 'contain',
   },
   divider: {
     height: 1,
@@ -416,7 +425,7 @@ const styles = StyleSheet.create({
     right: 12,
     backgroundColor: 'white',
     borderColor: GlobalStyles.Color.Primary,
-    borderWidth: 2,
+    borderWidth: 1,
   },
   deleteButton: {
     bottom: 34,

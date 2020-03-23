@@ -61,10 +61,10 @@ export class ContactUsScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Image
+        {/* <Image
           style={styles.backgroundImage}
           source={require('../images/background.jpg')}
-        />
+        /> */}
         <View style={styles.row}>
           <Image
             style={styles.rowIcon}
@@ -87,22 +87,19 @@ export class ContactUsScreen extends Component {
             style={styles.rowText}
             placeholder="Email Address"
             autoCorrect={false}
-            editable={this.props.route.params.isAdminUser}
+            editable={false} //{this.props.route.params.isAdminUser}
             value={this.state.contact.emailID}
           />
         </View>
         <View style={styles.rowdivider}></View>
         <View style={styles.row}>
-          <Image
-            style={[styles.rowIcon, styles.rowMultilineIcon]}
-            source={require('../images/info.png')}></Image>
+          <Image style={[styles.rowIcon, styles.rowMultilineIcon]}></Image>
           <TextInput
             style={[styles.rowText, styles.rowMultilineText]}
             placeholder="Additional Information"
             autoCorrect={false}
             multiline
-            numberOfLines={8}
-            editable={this.props.route.params.isAdminUser}
+            editable={false} //{this.props.route.params.isAdminUser}
             value={this.state.contact.additionalInfo}
           />
         </View>
@@ -149,12 +146,12 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   rowdivider: {
-    height: 0.5,
+    height: 1,
     marginLeft: 12,
     marginRight: 12,
-    backgroundColor: GlobalStyles.Color.Secondary,
-    marginTop: 4,
-    marginBottom: 12,
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    marginTop: 12,
+    // marginBottom: 12,
   },
   rowIcon: {
     height: 28,
@@ -168,8 +165,9 @@ const styles = StyleSheet.create({
     marginRight: 8,
     fontSize: 18,
     fontWeight: 'bold',
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderRadius: 4,
+    color: 'black',
+    // backgroundColor: 'red',
   },
   rowMultilineIcon: {
     alignSelf: 'baseline',
