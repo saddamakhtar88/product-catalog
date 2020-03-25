@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {StyleSheet} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import ImageView from 'react-native-image-viewing';
 import {EnvironmentConfiguration} from '../EnvironmentConfiguration';
 
@@ -18,26 +17,13 @@ export class ImageGalleryScreen extends Component {
 
   render() {
     return (
-      <SafeAreaView style={styles.container}>
-        <ImageView
-          images={data}
-          imageIndex={0}
-          visible={true}
-          onRequestClose={() => this.props.navigation?.goBack()}
-        />
-      </SafeAreaView>
+      <ImageView
+        images={data}
+        imageIndex={0}
+        visible={true}
+        presentationStyle="overFullScreen"
+        onRequestClose={() => this.props.navigation?.goBack()}
+      />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'black',
-    alignItems: 'flex-end',
-  },
-  closeButton: {
-    width: 64,
-    height: 64,
-  },
-});
