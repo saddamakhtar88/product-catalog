@@ -164,10 +164,8 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 8,
     fontSize: 18,
-    fontWeight: 'bold',
     borderRadius: 4,
-    color: 'black',
-    // backgroundColor: 'red',
+    color: GlobalStyles.Color.Text,
   },
   rowMultilineIcon: {
     alignSelf: 'baseline',

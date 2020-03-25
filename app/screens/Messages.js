@@ -123,20 +123,24 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 4,
+    color: GlobalStyles.Color.Text,
   },
   messageContact: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 4,
+    color: GlobalStyles.Color.Text,
   },
   message: {
     fontSize: 18,
     marginBottom: 4,
     marginTop: 8,
+    color: GlobalStyles.Color.Text,
   },
   messagePostedOn: {
     fontSize: 16,
     alignSelf: 'flex-end',
     marginTop: 16,
+    color: GlobalStyles.Color.Text,
   },
 });

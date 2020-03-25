@@ -144,7 +144,7 @@ export class HomeScreen extends Component {
                 } else {
                   this.props.navigation?.navigate('Info', {
                     ...item,
-                    isEditable: false,
+                    isAdminUser: false,
                   });
                 }
               }}></Thumbnail>

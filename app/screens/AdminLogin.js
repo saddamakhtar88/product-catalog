@@ -64,6 +64,7 @@ export class AdminLoginScreen extends Component {
             <View style={styles.button}>
               <Button
                 title="Cancel"
+                color={GlobalStyles.Color.Primary}
                 onPress={() => {
                   this.props.navigation?.goBack();
                 }}
@@ -72,6 +73,7 @@ export class AdminLoginScreen extends Component {
             <View style={styles.button}>
               <Button
                 title="Submit"
+                color={GlobalStyles.Color.Primary}
                 onPress={() => {
                   this.onSubmit(this.state.password);
                 }}
@@ -111,8 +113,8 @@ const styles = StyleSheet.create({
   rowText: {
     flex: 1,
     fontSize: 18,
-    fontWeight: 'bold',
     borderRadius: 4,
+    color: GlobalStyles.Color.Text,
   },
   box: {
     height: 130,

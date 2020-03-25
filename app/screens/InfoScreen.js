@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {ScrollView, StyleSheet, View, TextInput} from 'react-native';
+import {GlobalStyles} from '../Styles';
 
 export class InfoScreen extends Component {
   constructor(props) {
@@ -21,6 +22,7 @@ export class InfoScreen extends Component {
               placeholder="Title"
               autoCorrect={false}
               maxLength={16}
+              editable={this.props.route.params.isAdminUser}
               onChangeText={text => {
                 this.props.route.params.title = text;
                 this.setState(_ => ({
@@ -37,6 +39,7 @@ export class InfoScreen extends Component {
               placeholder="Description"
               autoCorrect={false}
               multiline
+              editable={this.props.route.params.isAdminUser}
               onChangeText={text => {
                 this.props.route.params.description = text;
                 this.setState(_ => ({
@@ -74,8 +77,8 @@ const styles = StyleSheet.create({
   rowText: {
     flex: 1,
     fontSize: 18,
-    fontWeight: 'bold',
     borderRadius: 4,
+    color: GlobalStyles.Color.Text,
   },
   rowMultilineIcon: {
     alignSelf: 'baseline',

@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
   rowText: {
     flex: 1,
     fontSize: 18,
-    fontWeight: 'bold',
+    color: GlobalStyles.Color.Text,
     borderRadius: 4,
   },
   rowMultilineIcon: {
