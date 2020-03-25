@@ -65,12 +65,11 @@ export class HomeScreen extends Component {
     }));
     this.loadData();
     focusSubscription = this.props.navigation?.addListener('focus', () => {
-      {
-        if (this.props?.route?.params?.isFromLoginScreen) {
-          this.enableAdminMode(true);
-        }
-        this.loadData();
+      if (this.props.route.params?.isFromLoginScreen === true) {
+        delete this.props.route.params.isFromLoginScreen;
+        this.enableAdminMode(true);
       }
+      this.loadData();
     });
   }
 
