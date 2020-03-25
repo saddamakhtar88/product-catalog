@@ -243,8 +243,8 @@ export class AddOrEditScreen extends Component {
                       activeOpacity={0.2}
                       onPress={() => {
                         ImagePicker.openCamera({
-                          width: 300,
-                          height: 400,
+                          // width: 1200,
+                          // height: 1600,
                           cropping: true,
                         }).then(image => {
                           this.addImageInTheList(image);
@@ -259,8 +259,8 @@ export class AddOrEditScreen extends Component {
                       activeOpacity={0.2}
                       onPress={() => {
                         ImagePicker.openPicker({
-                          width: 300,
-                          height: 400,
+                          // width: 1200,
+                          // height: 1600,
                           cropping: true,
                         }).then(image => {
                           this.addImageInTheList(image);

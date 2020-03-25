@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: 'rgba(0,0,0,0.2)',
     borderWidth: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#f5f5f7',
     overflow: 'hidden',
   },
   image: {
