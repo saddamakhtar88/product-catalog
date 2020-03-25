@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 8,
     borderColor: 'rgba(0,0,0,0.2)',
-    borderWidth: 1,
+    borderWidth: 0.8,
     backgroundColor: '#f5f5f7',
     overflow: 'hidden',
   },
@@ -63,6 +63,8 @@ const styles = StyleSheet.create({
     padding: 4,
     width: '100%',
     height: 30,
+    borderTopWidth: 0.6,
+    borderTopColor: 'rgba(0,0,0,0.2)',
   },
   label: {
     fontSize: 14,
