@@ -52,7 +52,7 @@ function MainStackScreen() {
       <MainStack.Screen
         name="Home"
         component={HomeScreen}
-        options={{title: 'Catalog'}}></MainStack.Screen>
+        options={{title: 'Asha Textiles'}}></MainStack.Screen>
       <MainStack.Screen
         name="AddOrEdit"
         component={AddOrEditScreen}
