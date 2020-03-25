@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   editCTA: {
-    width: 60,
+    alignSelf: 'center',
     height: 34,
     resizeMode: 'contain',
   },
