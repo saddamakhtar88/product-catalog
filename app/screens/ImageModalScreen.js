@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {
+  Alert,
   View,
   FlatList,
   Image,
   StyleSheet,
   Dimensions,
   StatusBar,
-  Text,
+  Share,
 } from 'react-native';
 import {EnvironmentConfiguration} from '../EnvironmentConfiguration';
 import ImageZoom from 'react-native-image-pan-zoom';
@@ -16,6 +17,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 export class ImageModalScreen extends Component {
   constructor(props) {
     super();
+    currentPageIndex = 0;
     data = [];
     imageItems = props.route.params;
     imageItems.forEach(function(item, index) {
@@ -24,6 +26,42 @@ export class ImageModalScreen extends Component {
       });
     });
   }
+
+  onScrollEnd(scrollEvent) {
+    if (scrollEvent.nativeEvent.contentOffset.x == 0) {
+      this.onPageChange(0);
+    } else {
+      pageIndex =
+        scrollEvent.nativeEvent.layoutMeasurement.width /
+        scrollEvent.nativeEvent.contentOffset.x;
+      this.onPageChange(pageIndex);
+    }
+  }
+
+  onPageChange(index) {
+    currentPageIndex = index;
+  }
+
+  onShare = async content => {
+    console.log(content);
+    try {
+      const result = await Share.share({
+        message: content,
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Something went wrong.');
+    }
+  };
 
   render() {
     return (
@@ -43,15 +81,21 @@ export class ImageModalScreen extends Component {
               imageHeight={Dimensions.get('window').height}>
               <FastImage style={Styles.image} source={item} />
             </ImageZoom>
-          )}></FlatList>
-        <View style={Styles.closeButtonContainer}>
+          )}
+          onMomentumScrollEnd={scrollevent => {
+            this.onScrollEnd(scrollevent);
+          }}></FlatList>
+        <View style={Styles.shareButtonContainer}>
           <TouchableOpacity
-            style={Styles.closeButton}
+            style={Styles.shareButton}
             onPress={() => {
-              this.props.navigation?.goBack();
+              this.onShare(data[currentPageIndex].uri);
             }}
             activeOpacity={0.8}>
-            <Text style={Styles.closeButtonLabel}>X</Text>
+            <Image
+              style={Styles.shareButtonImage}
+              source={require('../images/share.png')}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -69,7 +113,7 @@ const Styles = StyleSheet.create({
     flex: 1,
     resizeMode: 'center',
   },
-  closeButtonContainer: {
+  shareButtonContainer: {
     position: 'absolute',
     top: 8,
     right: 8,
@@ -78,16 +122,16 @@ const Styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: 'rgba(0,0,0,0.6)',
     justifyContent: 'center',
-    alignContent: 'center',
   },
-  closeButton: {
+  shareButton: {
     width: '100%',
     height: '100%',
     justifyContent: 'center',
   },
-  closeButtonLabel: {
+  shareButtonImage: {
     alignSelf: 'center',
-    color: 'white',
-    fontSize: 18,
+    width: '50%',
+    height: '50%',
+    resizeMode: 'contain',
   },
 });
