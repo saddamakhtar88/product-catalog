@@ -8,6 +8,7 @@ import {
   Dimensions,
   StatusBar,
   Share,
+  Text,
 } from 'react-native';
 import {EnvironmentConfiguration} from '../EnvironmentConfiguration';
 import ImageZoom from 'react-native-image-pan-zoom';
@@ -17,7 +18,11 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 export class ImageModalScreen extends Component {
   constructor(props) {
     super();
-    currentPageIndex = 0;
+
+    this.state = {
+      currentPageIndex: 0,
+    };
+
     data = [];
     imageItems = props.route.params;
     imageItems.forEach(function(item, index) {
@@ -39,7 +44,9 @@ export class ImageModalScreen extends Component {
   }
 
   onPageChange(index) {
-    currentPageIndex = index;
+    this.setState(previousState => ({
+      currentPageIndex: index,
+    }));
   }
 
   onShare = async content => {
@@ -98,6 +105,11 @@ export class ImageModalScreen extends Component {
             />
           </TouchableOpacity>
         </View>
+        <View style={Styles.pageIndicatorContainer}>
+          <Text style={Styles.pageIndicatorLabel}>
+            {this.state.currentPageIndex + 1} / {data.length}
+          </Text>
+        </View>
       </View>
     );
   }
@@ -133,5 +145,19 @@ const Styles = StyleSheet.create({
     width: '50%',
     height: '50%',
     resizeMode: 'contain',
+  },
+  pageIndicatorContainer: {
+    position: 'absolute',
+    bottom: 8,
+    alignSelf: 'center',
+    padding: 8,
+    borderRadius: 8,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    justifyContent: 'center',
+  },
+  pageIndicatorLabel: {
+    alignSelf: 'center',
+    color: 'white',
+    fontSize: 18,
   },
 });
