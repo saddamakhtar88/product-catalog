@@ -21,6 +21,7 @@ import {ContactUsScreen} from './app/screens/ContactUs';
 import {MessageUsScreen} from './app/screens/MessageUs';
 import {MessagesScreen} from './app/screens/Messages';
 import {AdminLoginScreen} from './app/screens/AdminLogin';
+import {ImageModalScreen} from './app/screens/ImageModalScreen';
 
 const MainStack = createStackNavigator();
 const RootStack = createStackNavigator();
@@ -87,6 +88,10 @@ function RootStackScreen() {
       <RootStack.Screen
         name="ImageGallery"
         component={ImageGalleryScreen}
+        options={{headerShown: false}}></RootStack.Screen>
+      <RootStack.Screen
+        name="ImageModal"
+        component={ImageModalScreen}
         options={{headerShown: false}}></RootStack.Screen>
       <RootStack.Screen
         name="Login"

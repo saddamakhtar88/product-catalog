@@ -136,7 +136,8 @@ export class HomeScreen extends Component {
               label={item.title}
               showEditIcon={this.state.isEditModeEnabled}
               onPress={() => {
-                this.props.navigation?.navigate('ImageGallery', item.images);
+                // this.props.navigation?.navigate('ImageGallery', item.images);
+                this.props.navigation?.navigate('ImageModal', item.images);
               }}
               onBottomPress={() => {
                 if (this.state.isEditModeEnabled) {
